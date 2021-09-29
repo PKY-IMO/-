@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <h1>test</h1>
+  <button id="connect">connect</button>
+  <button id="send">send</button>
+  <div id="show"></div>
+  <script>
+    var connectBtn = document.querySelector('#connect') // 测试连接按钮
+    var sendBtn = document.querySelector('#send') // 向服务端发送数据按钮
+    var show = document.querySelector('#show')
+    let ws = null
+    connectBtn.onclick = ()=>{
+      ws = new window.WebSocket('ws://localhost:9999')
+      ws.onopen = ()=>{
+        console.log('connect !')
+      }
+      ws.onmessage = msg => {
+        console.log(JSON.stringify(msg.data))
+        show.innerHTML = msg.data
+      }
+    }
+    sendBtn.onclick = () => {
+      ws.send(JSON.stringify({ // 客户端向服务端发送消息
+        action: 'xgetData',
+        socketType: 'rankData',
+        chartName: 'rank',
+        value: 'true'
+      }))
+    }
+  </script>
+</body>
+</html>
